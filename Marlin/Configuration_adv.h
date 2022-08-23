@@ -34,6 +34,8 @@
  */
 #define CONFIGURATION_ADV_H_VERSION 02010000
 
+
+
 //===========================================================================
 //============================= Thermal Settings ============================
 //===========================================================================
@@ -986,7 +988,7 @@
 #if ENABLED(ASSISTED_TRAMMING)
 
   // Define positions for probe points.
-  #define TRAMMING_POINT_XY { {  20, 20 }, { 180,  20 }, { 180, 180 }, { 20, 180 } }
+  #define TRAMMING_POINT_XY { {  45, 45 }, { 180,  45 }, { 180, 180 }, { 45, 180 } }
 
   // Define position names for probe points.
   #define TRAMMING_POINT_NAME_1 "Front-Left"
@@ -997,7 +999,7 @@
   #define RESTORE_LEVELING_AFTER_G35    // Enable to restore leveling setup after operation
   //#define REPORT_TRAMMING_MM          // Report Z deviation (mm) for each point relative to the first
 
-  //#define ASSISTED_TRAMMING_WIZARD    // Add a Tramming Wizard to the LCD menu
+  #define ASSISTED_TRAMMING_WIZARD    // Add a Tramming Wizard to the LCD menu
 
   //#define ASSISTED_TRAMMING_WAIT_POSITION { X_CENTER, Y_CENTER, 30 } // Move the nozzle out of the way for adjustment
 
@@ -1623,7 +1625,7 @@
   //#define CONFIGURATION_EMBEDDING
 
   // Add an optimized binary file transfer mode, initiated with 'M28 B1'
-  //#define BINARY_FILE_TRANSFER
+  #define BINARY_FILE_TRANSFER
 
   #if ENABLED(BINARY_FILE_TRANSFER)
     // Include extra facilities (e.g., 'M20 F') supporting firmware upload via BINARY_FILE_TRANSFER
@@ -2082,12 +2084,28 @@
  * probe points will follow. This prevents any change from causing
  * the probe to be unable to reach any points.
  */
+
+//https://github.com/MarlinFirmware/Marlin/issues/16847
+// making these changes to fix UBL stopping probe due to limits of bed and offset of probe
+// based on #define NOZZLE_TO_PROBE_OFFSET { -43, -6, 0 } in Configuration.h, line 1286
+
 #if PROBE_SELECTED && !IS_KINEMATIC
-  #define PROBING_MARGIN_LEFT 20
-  //#define PROBING_MARGIN_RIGHT PROBING_MARGIN
-  #define PROBING_MARGIN_FRONT 6
-  //#define PROBING_MARGIN_BACK PROBING_MARGIN
+  #define PROBING_MARGIN_LEFT 0
+  #define PROBING_MARGIN_RIGHT 44
+  #define PROBING_MARGIN_FRONT 8
+  #define PROBING_MARGIN_BACK 8
 #endif
+
+// #define LEFT_PROBE_BED_POSITION (MIN_PROBE_EDGE)
+// #define RIGHT_PROBE_BED_POSITION (X_BED_SIZE  + X_PROBE_OFFSET_FROM_EXTRUDER - MIN_PROBE_EDGE)
+// #define FRONT_PROBE_BED_POSITION (Y_PROBE_OFFSET_FROM_EXTRUDER + MIN_PROBE_EDGE)
+// #define BACK_PROBE_BED_POSITION (Y_BED_SIZE - MIN_PROBE_EDGE)
+
+
+// #define LEFT_PROBE_BED_POSITION (MIN_PROBE_EDGE)
+// #define RIGHT_PROBE_BED_POSITION (X_BED_SIZE  + X_PROBE_OFFSET_FROM_EXTRUDER - MIN_PROBE_EDGE)
+// #define FRONT_PROBE_BED_POSITION (Y_PROBE_OFFSET_FROM_EXTRUDER + MIN_PROBE_EDGE)
+// #define BACK_PROBE_BED_POSITION (Y_BED_SIZE - MIN_PROBE_EDGE)
 
 #if EITHER(MESH_BED_LEVELING, AUTO_BED_LEVELING_UBL)
   // Override the mesh area if the automatic (max) area is too large
@@ -4137,10 +4155,10 @@
  * Host Prompt Support enables Marlin to use the host for user prompts so
  * filament runout and other processes can be managed from the host side.
  */
-//#define HOST_ACTION_COMMANDS
+#define HOST_ACTION_COMMANDS
 #if ENABLED(HOST_ACTION_COMMANDS)
   //#define HOST_PAUSE_M76                // Tell the host to pause in response to M76
-  //#define HOST_PROMPT_SUPPORT           // Initiate host prompts to get user feedback
+  #define HOST_PROMPT_SUPPORT           // Initiate host prompts to get user feedback
   #if ENABLED(HOST_PROMPT_SUPPORT)
     //#define HOST_STATUS_NOTIFICATIONS   // Send some status messages to the host as notifications
   #endif
